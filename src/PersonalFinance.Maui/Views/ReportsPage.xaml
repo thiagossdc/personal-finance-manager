@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.ReportsPage"
+             Title="Relatórios">
+    <ScrollView Padding="16">
+        <VerticalStackLayout Spacing="8">
+            <Label Text="Relatórios" Style="{StaticResource TitleLabel}"/>
+
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="4">
+                    <HorizontalStackLayout Spacing="8">
+                        <Picker Title="Mês" ItemsSource="{Binding Months}" SelectedItem="{Binding SelectedMonth}" HorizontalOptions="FillAndExpand"/>
+                        <Picker Title="Ano" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="8">
+                        <Button Text="Gerar" Command="{Binding GenerateReportCommand}" IsEnabled="{Binding IsNotBusy}" HorizontalOptions="FillAndExpand"/>
+                        <Button Text="Exportar PDF" Command="{Binding ExportPdfCommand}" IsEnabled="{Binding IsNotBusy}" HorizontalOptions="FillAndExpand"/>
+                        <Button Text="Exportar CSV" Command="{Binding ExportCsvCommand}" IsEnabled="{Binding IsNotBusy}" HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                    <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+                    <Label Text="{Binding CsvExportResult}" IsVisible="{Binding HasCsvResult}" FontSize="12"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                <Border Style="{StaticResource CardFrame}">
+                    <VerticalStackLayout>
+                        <Label Text="Receitas" FontSize="12"/>
+                        <Label Text="{Binding TotalIncome}" TextColor="{StaticResource IncomeGreen}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                    <VerticalStackLayout>
+                        <Label Text="Despesas" FontSize="12"/>
+                        <Label Text="{Binding TotalExpense}" TextColor="{StaticResource ExpenseRed}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource CardFrame}">
+                    <VerticalStackLayout>
+                        <Label Text="Economia" FontSize="12"/>
+                        <Label Text="{Binding NetSavings}" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <Label Text="Despesas por categoria" Style="{StaticResource SectionLabel}"/>
+            <Label Text="Nenhuma despesa no período." IsVisible="{Binding HasNoCategories}" TextColor="{StaticResource Gray500}"/>
+            <CollectionView ItemsSource="{Binding CategorySummaries}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Null}">
+                        <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding CategoryName}"/>
+                                <Label Grid.Column="1" Text="{Binding Percentage, StringFormat='{0}%'}" FontAttributes="Bold"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

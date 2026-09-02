@@ -1,0 +1,59 @@
+# .NET build output
+bin/
+obj/
+artifacts/
+*.user
+*.suo
+*.userprefs
+
+# Visual Studio
+.vs/
+.vscode/
+.idea/
+
+# Rider
+.idea/
+
+# Test results
+TestResults/
+*.trx
+coverage*.json
+coverage.cobertura.xml
+
+# NuGet
+*.nupkg
+packages/
+nuget.config.bak
+
+# Secrets / local config (never commit)
+appsettings.Development.json
+appsettings.Local.json
+.env
+*.local.json
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# OS
+.DS_Store
+Thumbs.db
+
+# MAUI / mobile
+*.p12
+*.keystore
+*.apk
+*.aab
+*.ipa
+bin/
+obj/
+
+# Logs
+logs/
+*.log
+serilog-*.txt
+# Artefatos locais do NuGet
+.local/

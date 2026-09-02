@@ -1,0 +1,43 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Color x:Key="Primary">#512BD4</Color>
+    <Color x:Key="PrimaryDark">#ac99ea</Color>
+    <Color x:Key="Secondary">#DFD8F7</Color>
+    <Color x:Key="Tertiary">#2B0B98</Color>
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="Gray100">#E1E1E1</Color>
+    <Color x:Key="Gray200">#C8C8C8</Color>
+    <Color x:Key="Gray400">#ACACAC</Color>
+    <Color x:Key="Gray500">#8E8E8E</Color>
+    <Color x:Key="Gray900">#212121</Color>
+    <Color x:Key="Gray950">#141414</Color>
+
+    <!-- Cores financeiras -->
+    <Color x:Key="IncomeGreen">#2E7D32</Color>
+    <Color x:Key="ExpenseRed">#C62828</Color>
+    <Color x:Key="WarningAmber">#F9A825</Color>
+
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
+    <SolidColorBrush x:Key="IncomeGreenBrush" Color="{StaticResource IncomeGreen}"/>
+    <SolidColorBrush x:Key="ExpenseRedBrush" Color="{StaticResource ExpenseRed}"/>
+    <SolidColorBrush x:Key="WarningAmberBrush" Color="{StaticResource WarningAmber}"/>
+
+    <Color x:Key="Yellow100Accent">#F7B548</Color>
+    <Color x:Key="Green100Accent">#28C09F</Color>
+
+    <!-- Light -->
+    <Color x:Key="LightPageBackgroundColor">#F2F2F7</Color>
+    <Color x:Key="LightCardBackgroundColor">White</Color>
+    <Color x:Key="LightPrimaryTextColor">Black</Color>
+
+    <!-- Dark -->
+    <Color x:Key="DarkPageBackgroundColor">#141414</Color>
+    <Color x:Key="DarkCardBackgroundColor">#1E1E1E</Color>
+    <Color x:Key="DarkPrimaryTextColor">White</Color>
+
+</ResourceDictionary>

@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore PersonalFinanceManager.slnx
+
+      - name: Format check
+        run: dotnet format PersonalFinanceManager.slnx --verify-no-changes --no-restore
+
+      - name: Build backend
+        run: |
+          dotnet build src/PersonalFinance.Domain/PersonalFinance.Domain.csproj --no-restore -c Release
+          dotnet build src/PersonalFinance.Application/PersonalFinance.Application.csproj --no-restore -c Release
+          dotnet build src/PersonalFinance.Infrastructure/PersonalFinance.Infrastructure.csproj --no-restore -c Release
+          dotnet build src/PersonalFinance.Api/PersonalFinance.Api.csproj --no-restore -c Release
+          dotnet build src/PersonalFinance.Maui.Core/PersonalFinance.Maui.Core.csproj --no-restore -c Release
+
+      - name: Test
+        run: dotnet test PersonalFinanceManager.slnx --no-build -c Release --filter "FullyQualifiedName!~Maui" --verbosity normal
+        continue-on-error: false
+
+      - name: Test (with build)
+        run: dotnet test tests/PersonalFinance.Domain.Tests tests/PersonalFinance.Application.Tests tests/PersonalFinance.Infrastructure.Tests tests/PersonalFinance.Api.Tests -c Release --verbosity normal

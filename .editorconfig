@@ -1,0 +1,54 @@
+# EditorConfig for the Personal Finance Manager solution
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{cs,csx}]
+indent_size = 4
+csharp_new_line_before_open_brace = all
+csharp_indent_case_contents = true
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+dotnet_style_qualification_for_field = false
+dotnet_style_qualification_for_property = false
+dotnet_style_qualification_for_method = false
+dotnet_style_qualification_for_event = false
+dotnet_style_prefer_auto_properties = true:warning
+dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
+dotnet_style_coalesce_expression = true:suggestion
+dotnet_style_null_propagation = true:suggestion
+dotnet_style_require_compiler_unused_usings_removal = false
+csharp_style_var_for_built_in_types = false
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+[*.{xaml}]
+indent_size = 2
+insert_final_newline = true
+
+[*.{json,yml,yaml,csproj,props,targets}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+# Code style analyzers (IDE)
+dotnet_diagnostic.IDE0064.severity = none
+dotnet_diagnostic.CA1848.severity = suggestion
+
+# Unit test method naming conventions
+[tests/**.cs]
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.CA2007.severity = none
+
+# EF Core migrations (código gerado — não aplicar regras de qualidade)
+[src/**/Migrations/**.cs]
+generated_code = true
+dotnet_diagnostic.CA1861.severity = none
+dotnet_analyzer_diagnostic.category_Quality.severity = none

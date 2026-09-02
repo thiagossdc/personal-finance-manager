@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.CategoriesPage"
+             Title="Categorias">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="8">
+        <Label Grid.Row="0" Text="Categorias" Style="{StaticResource TitleLabel}"/>
+
+        <Border Grid.Row="1" Style="{StaticResource CardFrame}">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Nova categoria" Style="{StaticResource SectionLabel}" Margin="0"/>
+                <Entry Text="{Binding Name}" Placeholder="Nome"/>
+                <HorizontalStackLayout Spacing="8">
+                    <Picker ItemsSource="{Binding CategoryTypes}" SelectedItem="{Binding SelectedType}" HorizontalOptions="FillAndExpand"/>
+                    <Picker ItemsSource="{Binding AvailableIcons}" SelectedItem="{Binding SelectedIcon}" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+                <Button Text="Adicionar" Command="{Binding CreateCategoryCommand}" IsEnabled="{Binding IsNotBusy}"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Categories}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Null}">
+                    <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                <Label Text="{Binding Type}" FontSize="12" TextColor="{StaticResource Gray500}"/>
+                            </VerticalStackLayout>
+                            <Button Grid.Column="1" Text="Excluir" Style="{StaticResource DangerButton}"
+                                    Command="{Binding BindingContext.DeleteCategoryCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    CommandParameter="{Binding .}" Padding="8,4" Margin="0"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

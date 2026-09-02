@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/PersonalFinance.Api/PersonalFinance.Api.csproj" />
+    <Project Path="src/PersonalFinance.Application/PersonalFinance.Application.csproj" />
+    <Project Path="src/PersonalFinance.Domain/PersonalFinance.Domain.csproj" />
+    <Project Path="src/PersonalFinance.Infrastructure.Postgres/PersonalFinance.Infrastructure.Postgres.csproj" />
+    <Project Path="src/PersonalFinance.Infrastructure/PersonalFinance.Infrastructure.csproj" />
+    <Project Path="src/PersonalFinance.Maui.Core/PersonalFinance.Maui.Core.csproj" />
+    <Project Path="src/PersonalFinance.Maui/PersonalFinance.Maui.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PersonalFinance.Api.Tests/PersonalFinance.Api.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Application.Tests/PersonalFinance.Application.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Domain.Tests/PersonalFinance.Domain.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Infrastructure.Tests/PersonalFinance.Infrastructure.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Maui.Core.Tests/PersonalFinance.Maui.Core.Tests.csproj" />
+  </Folder>
+</Solution>

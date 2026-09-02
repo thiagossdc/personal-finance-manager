@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.DashboardPage"
+             Title="Dashboard">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16">
+        <VerticalStackLayout Grid.Row="0" Spacing="8">
+            <HorizontalStackLayout Spacing="12">
+                <Label Text="Dashboard" Style="{StaticResource TitleLabel}" VerticalOptions="Center"/>
+                <Button Text="Sync" Command="{Binding SyncCommand}" IsEnabled="{Binding IsNotBusy}" Padding="12,6" Margin="0" VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+            <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+        </VerticalStackLayout>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" ColumnSpacing="8" Margin="0,0,0,12">
+            <Border Grid.Column="0" Style="{StaticResource CardFrame}">
+                <VerticalStackLayout>
+                    <Label Text="Saldo Total" FontSize="12"/>
+                    <Label Text="{Binding CurrentBalance}" Style="{StaticResource TitleLabel}" Margin="0"/>
+                </VerticalStackLayout>
+            </Border>
+            <Border Grid.Column="1" Style="{StaticResource CardFrame}">
+                <VerticalStackLayout>
+                    <Label Text="Receitas" FontSize="12"/>
+                    <Label Text="{Binding MonthlyIncome}" TextColor="{StaticResource IncomeGreen}"/>
+                </VerticalStackLayout>
+            </Border>
+            <Border Grid.Column="2" Style="{StaticResource CardFrame}">
+                <VerticalStackLayout>
+                    <Label Text="Despesas" FontSize="12"/>
+                    <Label Text="{Binding MonthlyExpense}" TextColor="{StaticResource ExpenseRed}"/>
+                </VerticalStackLayout>
+            </Border>
+            <Border Grid.Column="3" Style="{StaticResource CardFrame}">
+                <VerticalStackLayout>
+                    <Label Text="Economia" FontSize="12"/>
+                    <Label Text="{Binding MonthlySavings}"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="12">
+            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                <Label Text="Contas" Style="{StaticResource SectionLabel}"/>
+                <CollectionView ItemsSource="{Binding Accounts}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="x:Object">
+                            <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding CurrentBalance}" FontSize="12"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                <Label Text="Transações Recentes" Style="{StaticResource SectionLabel}"/>
+                <CollectionView ItemsSource="{Binding RecentTransactions}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="x:Object">
+                            <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Description}" FontAttributes="Bold"/>
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label Text="{Binding Amount}" FontSize="12"/>
+                                        <Label Text="{Binding Type}" FontSize="12" TextColor="{StaticResource Gray500}"/>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Grid.ColumnSpan="2" VerticalOptions="Center"/>
+        </Grid>
+    </Grid>
+</ContentPage>

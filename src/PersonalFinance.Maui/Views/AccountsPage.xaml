@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.AccountsPage"
+             Title="Contas">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="8">
+        <Label Grid.Row="0" Text="Contas" Style="{StaticResource TitleLabel}"/>
+
+        <Border Grid.Row="1" Style="{StaticResource CardFrame}">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Nova conta" Style="{StaticResource SectionLabel}" Margin="0"/>
+                <Entry Text="{Binding Name}" Placeholder="Nome da conta"/>
+                <Picker ItemsSource="{Binding AccountTypes}" SelectedItem="{Binding SelectedType}"/>
+                <Entry Text="{Binding InitialBalance}" Keyboard="Numeric" Placeholder="Saldo inicial"/>
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+                <Button Text="Adicionar" Command="{Binding CreateAccountCommand}" IsEnabled="{Binding IsNotBusy}"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Accounts}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="x:Object">
+                    <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontAttributes="Bold"/>
+                            <Label Grid.Row="1" Grid.Column="0" Text="{Binding Type}" FontSize="12" TextColor="{StaticResource Gray500}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding CurrentBalance}" FontAttributes="Bold"/>
+                            <Button Grid.Row="1" Grid.Column="1" Text="Excluir" Style="{StaticResource DangerButton}"
+                                    Command="{Binding BindingContext.DeleteAccountCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                    CommandParameter="{Binding .}" Padding="8,4" Margin="0"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

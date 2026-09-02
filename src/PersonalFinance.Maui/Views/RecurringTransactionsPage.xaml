@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.RecurringTransactionsPage"
+             Title="Transações Recorrentes">
+    <ScrollView Padding="16">
+        <VerticalStackLayout Spacing="8">
+            <Grid ColumnDefinitions="*,Auto">
+                <Label Text="Recorrentes" Style="{StaticResource TitleLabel}" VerticalOptions="Center"/>
+                <Button Grid.Column="1" Text="Executar vencidas" Command="{Binding ExecuteDueCommand}" IsEnabled="{Binding IsNotBusy}"
+                        Padding="12,6" Margin="0" VerticalOptions="Center"/>
+            </Grid>
+
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Nova recorrência" Style="{StaticResource SectionLabel}" Margin="0"/>
+                    <Entry Text="{Binding Description}" Placeholder="Descrição"/>
+                    <HorizontalStackLayout Spacing="8">
+                        <Entry Text="{Binding Amount}" Keyboard="Numeric" Placeholder="Valor" HorizontalOptions="FillAndExpand"/>
+                        <Picker ItemsSource="{Binding TransactionTypes}" SelectedItem="{Binding SelectedType}" HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="8">
+                        <Picker ItemsSource="{Binding Frequencies}" SelectedItem="{Binding SelectedFrequency}" HorizontalOptions="FillAndExpand"/>
+                        <DatePicker Date="{Binding StartDate}" HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                    <Picker ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}" ItemDisplayBinding="{Binding Name}"/>
+                    <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" ItemDisplayBinding="{Binding Name}"/>
+                    <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+                    <Button Text="Criar" Command="{Binding CreateRecurringCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <CollectionView ItemsSource="{Binding RecurringItems}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Null}">
+                        <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Description}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding Frequency}" FontSize="12" TextColor="{StaticResource Gray500}"/>
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="Desativar" Command="{Binding BindingContext.DeactivateCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}"
+                                        CommandParameter="{Binding .}" Padding="8,4" Margin="0"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

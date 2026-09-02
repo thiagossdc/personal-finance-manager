@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: pf-postgres
+    environment:
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: finance_dev
+      POSTGRES_DB: personalfinance
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finance -d personalfinance"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: pf-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: deploy/Dockerfile
+    container_name: pf-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=personalfinance;Username=finance;Password=finance_dev
+      ConnectionStrings__Redis: redis:6379
+      Database__UsePostgres: "true"
+      Jwt__SecretKey: ${JWT_SECRET_KEY:-ChangeMeInProduction_UseAtLeast32CharactersLongKey!}
+      Jwt__Issuer: PersonalFinanceManager
+      Jwt__Audience: PersonalFinanceManager
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

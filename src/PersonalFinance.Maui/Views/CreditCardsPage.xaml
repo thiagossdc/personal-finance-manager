@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.CreditCardsPage"
+             Title="Cartões de Crédito">
+    <ScrollView Padding="16">
+        <VerticalStackLayout Spacing="8">
+            <Label Text="Cartões de Crédito" Style="{StaticResource TitleLabel}"/>
+
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Novo cartão" Style="{StaticResource SectionLabel}" Margin="0"/>
+                    <Entry Text="{Binding Name}" Placeholder="Nome do cartão"/>
+                    <HorizontalStackLayout Spacing="8">
+                        <Entry Text="{Binding CreditLimit}" Keyboard="Numeric" Placeholder="Limite" HorizontalOptions="FillAndExpand"/>
+                        <Entry Text="{Binding LastFourDigits}" Keyboard="Numeric" Placeholder="4 últimos" HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="Dia de fechamento (1-31)" FontSize="12"/>
+                    <Entry Text="{Binding ClosingDay}" Keyboard="Numeric"/>
+                    <Label Text="Dia de vencimento (1-31)" FontSize="12"/>
+                    <Entry Text="{Binding DueDay}" Keyboard="Numeric"/>
+                    </HorizontalStackLayout>
+                    <Button Text="Criar cartão" Command="{Binding CreateCardCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Nova compra" Style="{StaticResource SectionLabel}" Margin="0"/>
+                    <Picker ItemsSource="{Binding Cards}" SelectedItem="{Binding SelectedCard}" ItemDisplayBinding="{Binding Name}"/>
+                    <Entry Text="{Binding PurchaseDescription}" Placeholder="Descrição"/>
+                    <HorizontalStackLayout Spacing="8">
+                        <Entry Text="{Binding PurchaseAmount}" Keyboard="Numeric" Placeholder="Valor" HorizontalOptions="FillAndExpand"/>
+                        <Picker ItemsSource="{Binding InstallmentOptions}" SelectedItem="{Binding InstallmentCount}" HorizontalOptions="FillAndExpand"/>
+                    </HorizontalStackLayout>
+                    <Button Text="Registrar compra" Command="{Binding AddPurchaseCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Pagar fatura" Style="{StaticResource SectionLabel}" Margin="0"/>
+                    <Picker ItemsSource="{Binding Accounts}" SelectedItem="{Binding PaymentAccount}" ItemDisplayBinding="{Binding Name}"/>
+                    <Entry Text="{Binding PaymentAmount}" Keyboard="Numeric" Placeholder="Valor do pagamento"/>
+                    <Button Text="Pagar" Command="{Binding PayCardCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+
+            <CollectionView ItemsSource="{Binding Cards}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Null}">
+                        <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding OpenAmount, StringFormat='Fatura aberta: {0}'}" FontSize="12"/>
+                                    <Label Text="{Binding DueDay, StringFormat='Vence dia {0}'}" FontSize="12" TextColor="{StaticResource Gray500}"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

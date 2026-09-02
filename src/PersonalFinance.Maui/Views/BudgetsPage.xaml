@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.BudgetsPage"
+             Title="Orçamentos">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="8">
+        <Label Grid.Row="0" Text="Orçamentos" Style="{StaticResource TitleLabel}"/>
+
+        <Border Grid.Row="1" Style="{StaticResource CardFrame}">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Novo orçamento" Style="{StaticResource SectionLabel}" Margin="0"/>
+                <Picker ItemsSource="{Binding Categories}" SelectedItem="{Binding SelectedCategory}" ItemDisplayBinding="{Binding Name}"/>
+                <HorizontalStackLayout Spacing="8">
+                    <Entry Text="{Binding Limit}" Keyboard="Numeric" Placeholder="Limite" HorizontalOptions="FillAndExpand"/>
+                    <Entry Text="{Binding AlertThreshold}" Keyboard="Numeric" Placeholder="Alerta (0.8)" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+                <Button Text="Adicionar" Command="{Binding CreateBudgetCommand}" IsEnabled="{Binding IsNotBusy}"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Budgets}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="{x:Null}">
+                    <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                        <VerticalStackLayout Spacing="4">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding CategoryName}" FontAttributes="Bold"/>
+                                <Label Grid.Column="1" Text="{Binding Spent}"/>
+                            </Grid>
+                            <ProgressBar Progress="{Binding Progress}" ProgressColor="{StaticResource Primary}"/>
+                            <Label Text="{Binding Remaining, StringFormat='Restante: {0}'}" FontSize="12"/>
+                            <Label Text="⚠ Limite excedido!" Style="{StaticResource ErrorLabel}"
+                                   IsVisible="{Binding IsExceeded}"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

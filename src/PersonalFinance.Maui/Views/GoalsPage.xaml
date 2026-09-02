@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.GoalsPage"
+             Title="Metas">
+    <ScrollView Padding="16">
+        <VerticalStackLayout Spacing="8">
+            <Label Text="Metas" Style="{StaticResource TitleLabel}"/>
+
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Nova meta" Style="{StaticResource SectionLabel}" Margin="0"/>
+                    <Entry Text="{Binding Name}" Placeholder="Nome da meta"/>
+                    <Entry Text="{Binding TargetAmount}" Keyboard="Numeric" Placeholder="Valor alvo"/>
+                    <DatePicker Date="{Binding Deadline}"/>
+                    <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+                    <Button Text="Criar meta" Command="{Binding CreateGoalCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Style="{StaticResource CardFrame}">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Registrar aporte" Style="{StaticResource SectionLabel}" Margin="0"/>
+                    <Picker ItemsSource="{Binding Goals}" SelectedItem="{Binding SelectedGoal}" ItemDisplayBinding="{Binding Name}"/>
+                    <Picker ItemsSource="{Binding Accounts}" SelectedItem="{Binding ContributionAccount}" ItemDisplayBinding="{Binding Name}"/>
+                    <Entry Text="{Binding ContributionAmount}" Keyboard="Numeric" Placeholder="Valor do aporte"/>
+                    <Button Text="Aportar" Command="{Binding ContributeCommand}" IsEnabled="{Binding IsNotBusy}"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <CollectionView ItemsSource="{Binding Goals}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="{x:Null}">
+                        <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                            <VerticalStackLayout Spacing="4">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold"/>
+                                    <Label Grid.Column="1" Text="{Binding CurrentAmount}"/>
+                                </Grid>
+                                <ProgressBar Progress="{Binding Progress}"/>
+                                <Label Text="{Binding TargetAmount, StringFormat='Alvo: {0}'}" FontSize="12"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

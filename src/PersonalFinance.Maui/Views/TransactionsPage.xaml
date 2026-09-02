@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PersonalFinance.Maui.Views.TransactionsPage"
+             Title="Transações">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="8">
+        <Label Grid.Row="0" Text="Transações" Style="{StaticResource TitleLabel}"/>
+
+        <Border Grid.Row="1" Style="{StaticResource CardFrame}">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Nova transação" Style="{StaticResource SectionLabel}" Margin="0"/>
+                <Entry Text="{Binding Description}" Placeholder="Descrição"/>
+                <Entry Text="{Binding Amount}" Keyboard="Numeric" Placeholder="Valor"/>
+                <HorizontalStackLayout Spacing="8">
+                    <Picker ItemsSource="{Binding TransactionTypes}" SelectedItem="{Binding SelectedType}" HorizontalOptions="FillAndExpand"/>
+                    <Picker ItemsSource="{Binding Accounts}" SelectedItem="{Binding SelectedAccount}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="FillAndExpand"/>
+                </HorizontalStackLayout>
+                <Label Text="{Binding ErrorMessage}" Style="{StaticResource ErrorLabel}" IsVisible="{Binding HasError}"/>
+                <Button Text="Adicionar" Command="{Binding AddTransactionCommand}" IsEnabled="{Binding IsNotBusy}"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Transactions}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="x:Object">
+                    <Border Style="{StaticResource CardFrame}" Margin="0,0,0,8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Description}" FontAttributes="Bold"/>
+                                <Label Text="{Binding TransactionDate, StringFormat='{0:dd/MM/yyyy}'}" FontSize="12" TextColor="{StaticResource Gray500}"/>
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1" Text="{Binding Amount}" FontAttributes="Bold"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
