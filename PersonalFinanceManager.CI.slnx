@@ -1,0 +1,30 @@
+<Solution>
+  <!--
+    Solução usada EXCLUSIVAMENTE pelo CI em Linux.
+
+    Idêntica à PersonalFinanceManager.slnx, porém sem
+    `src/PersonalFinance.Maui/PersonalFinance.Maui.csproj`: esse projeto faz
+    multi-target para net10.0-ios/net10.0-maccatalyst, que exigem macOS e
+    Xcode. Incluí-lo faria `dotnet restore`/`dotnet test` falharem no runner
+    ubuntu-latest com "workloads must be installed: maui-tizen wasm-tools".
+
+    `PersonalFinance.Maui.Core` (código compartilhado do app, net10.0 puro)
+    permanece aqui — só a camada de UI fica de fora.
+    Não use esta solução para desenvolvimento local do app mobile.
+  -->
+  <Folder Name="/src/">
+    <Project Path="src/PersonalFinance.Api/PersonalFinance.Api.csproj" />
+    <Project Path="src/PersonalFinance.Application/PersonalFinance.Application.csproj" />
+    <Project Path="src/PersonalFinance.Domain/PersonalFinance.Domain.csproj" />
+    <Project Path="src/PersonalFinance.Infrastructure.Postgres/PersonalFinance.Infrastructure.Postgres.csproj" />
+    <Project Path="src/PersonalFinance.Infrastructure/PersonalFinance.Infrastructure.csproj" />
+    <Project Path="src/PersonalFinance.Maui.Core/PersonalFinance.Maui.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/PersonalFinance.Api.Tests/PersonalFinance.Api.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Application.Tests/PersonalFinance.Application.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Domain.Tests/PersonalFinance.Domain.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Infrastructure.Tests/PersonalFinance.Infrastructure.Tests.csproj" />
+    <Project Path="tests/PersonalFinance.Maui.Core.Tests/PersonalFinance.Maui.Core.Tests.csproj" />
+  </Folder>
+</Solution>

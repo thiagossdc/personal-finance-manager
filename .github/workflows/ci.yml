@@ -2,12 +2,17 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, master, develop]
   pull_request:
-    branches: [main, develop]
+    branches: [main, master, develop]
 
 jobs:
   build-and-test:
+    # MAUI não compila aqui: `PersonalFinance.Maui` faz multi-target para
+    # net10.0-ios/net10.0-maccatalyst, que exigem macOS + Xcode, indisponíveis
+    # no runner Linux. O código compartilhado do app (Maui.Core) é net10.0 puro
+    # e continua sendo compilado e testado aqui; o projeto de UI é validado
+    # apenas em pipeline macOS.
     runs-on: ubuntu-latest
 
     steps:
@@ -18,23 +23,36 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
+      # Solução sem o projeto MAUI: `dotnet test` na solução completa tentaria
+      # compilar o app iOS/MacCatalyst e falhar. Cada passo abaixo recebe um
+      # ou mais projetos explicitamente.
       - name: Restore
-        run: dotnet restore PersonalFinanceManager.slnx
+        run: dotnet restore PersonalFinanceManager.CI.slnx
 
       - name: Format check
-        run: dotnet format PersonalFinanceManager.slnx --verify-no-changes --no-restore
+        run: dotnet format PersonalFinanceManager.CI.slnx --verify-no-changes --no-restore
 
       - name: Build backend
         run: |
           dotnet build src/PersonalFinance.Domain/PersonalFinance.Domain.csproj --no-restore -c Release
           dotnet build src/PersonalFinance.Application/PersonalFinance.Application.csproj --no-restore -c Release
           dotnet build src/PersonalFinance.Infrastructure/PersonalFinance.Infrastructure.csproj --no-restore -c Release
+          dotnet build src/PersonalFinance.Infrastructure.Postgres/PersonalFinance.Infrastructure.Postgres.csproj --no-restore -c Release
           dotnet build src/PersonalFinance.Api/PersonalFinance.Api.csproj --no-restore -c Release
           dotnet build src/PersonalFinance.Maui.Core/PersonalFinance.Maui.Core.csproj --no-restore -c Release
 
+      # `dotnet test` aceita apenas um projeto por invocação (MSB1008), então
+      # cada suíte roda em seu próprio comando.
+      #
+      # Sem `--no-build`: o passo de build acima é guiado pelas dependências
+      # de produção e não gera o assembly de teste das suítes. Com
+      # `--no-build`, `dotnet test` falha com MSB4181 ("o argumento ...dll é
+      # inválido") porque o .dll da suíte ainda não existe.
       - name: Test
-        run: dotnet test PersonalFinanceManager.slnx --no-build -c Release --filter "FullyQualifiedName!~Maui" --verbosity normal
+        run: |
+          dotnet test tests/PersonalFinance.Domain.Tests -c Release --verbosity normal
+          dotnet test tests/PersonalFinance.Application.Tests -c Release --verbosity normal
+          dotnet test tests/PersonalFinance.Infrastructure.Tests -c Release --verbosity normal
+          dotnet test tests/PersonalFinance.Api.Tests -c Release --verbosity normal
+          dotnet test tests/PersonalFinance.Maui.Core.Tests -c Release --verbosity normal
         continue-on-error: false
-
-      - name: Test (with build)
-        run: dotnet test tests/PersonalFinance.Domain.Tests tests/PersonalFinance.Application.Tests tests/PersonalFinance.Infrastructure.Tests tests/PersonalFinance.Api.Tests -c Release --verbosity normal
